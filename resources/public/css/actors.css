@@ -1,0 +1,24 @@
+.actor {
+    width: 72px;
+    height: 72px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+}
+
+.actor-enemy {
+    transform: scaleX(-1);
+}
+
+.actor-knight {
+    background-image: url(../img/actors-good.png);
+    top: 0px;
+    left: 0px;
+    background-position: 0px -144px;
+}
+
+.actor-mage {
+    background-image: url(../img/actors-good.png);
+    background-position: 0px -216px;
+}

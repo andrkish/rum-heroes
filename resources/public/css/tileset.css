@@ -1,0 +1,54 @@
+.grid-back-tile {
+    display: inline-block;
+    margin: -2px 0px;
+    width: 72px;
+    height: 72px;
+}
+
+.grid-overlay {
+    width: 72px;
+    height: 72px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+}
+
+/* -------- background sprites ---------*/
+.grass-sprite-1 {
+    background-image: url(../img/tileset.png);
+    position: relative;
+    background-position: -360px -1224px;
+}
+
+.grass-sprite-2 {
+    background-image: url(../img/tileset.png);
+    position: relative;
+    background-position: -360px -1224px;
+    /*filter: hue-rotate(10deg);*/
+    filter: saturate(80%);
+}
+
+.grass-sprite-3 {
+    background-image: url(../img/tileset.png);
+    position: relative;
+    background-position: -360px -1224px;
+    filter: saturate(65%);
+    /*filter: hue-rotate(18deg);*/
+}
+
+/* ---------- overlay sprites ----------*/
+.forest-overlay-1 {
+    background-image: url(../img/tileset.png);
+    background-position: -432px -1152px;
+}
+
+.forest-overlay-2 {
+    background-image: url(../img/tileset.png);
+    background-position: -432px -1080px;
+}
+
+.forest-overlay-3 {
+    background-image: url(../img/tileset.png);
+    background-position: -648px -3168px;
+}

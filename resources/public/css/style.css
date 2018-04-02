@@ -1,2 +1,35 @@
 /* some style */
+body, html {
+    height: 100%;
+}
+
+body {
+    background-color: wheat;
+    background-image: radial-gradient(rgba(0,0,0,0) 40%,rgba(0,0,0,1) 115%), url(../img/background-image.jpg);
+    background-size: auto, 512px;
+}
+
+.world-wrapper {
+    width: 864px;
+    height: 504px;
+    position: relative;
+    margin: 30px auto 0;
+}
+
+.world {
+    width: 864px;
+    height: 504px;
+    background: #888888;
+    border: 15px solid #333333;
+    border-image: url(../img/border-image.png) 50 round;
+    box-shadow: 8px 8px 12px #222222;
+    overflow: hidden;
+}
+
+.world-overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: 12px 12px;
+}
 
