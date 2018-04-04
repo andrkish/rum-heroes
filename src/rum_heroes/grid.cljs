@@ -41,9 +41,6 @@
 (defn overlay? [x]
   (if (<= (rand-int 100) grid-dens) x 0))
 
-(defn not-zero? [x]
-  (not (zero? x)))
-
 ;; get initial background grid data
 (defn init-background-grid []
   (->> (map gen-background-tile (range grid-total))
@@ -59,6 +56,6 @@
 (defn init-background-overlay []
   (->> (range 0 grid-total)
        (map overlay?)
-       (filter not-zero?)
+       (remove zero?)
        (map create-overlay)
        (into {})))
