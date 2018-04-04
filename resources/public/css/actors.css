@@ -11,13 +11,21 @@
 }
 
 .actor-ui-hp {
-    background-color: greenyellow;
+    background-color: white;
     opacity: 0.7;
     text-align: center;
     display: block;
     margin: -10px auto;
     width: 15px;
     font-size: 10px;
+}
+
+.green {
+    background-color: greenyellow;
+}
+
+.red {
+    background-color: red;
 }
 
 .actor {
