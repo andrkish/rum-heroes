@@ -13,12 +13,25 @@
 
 .actor-knight {
     background-image: url(../img/actors-good.png);
-    top: 0px;
-    left: 0px;
     background-position: 0px -144px;
 }
 
 .actor-mage {
     background-image: url(../img/actors-good.png);
-    background-position: 0px -216px;
+    background-position: 0px -360px;
+}
+
+.actor-archer {
+    background-image: url(../img/actors-good.png);
+    background-position: 0px -504px;
+}
+
+.actor-swordman {
+    background-image: url(../img/actors-good.png);
+    background-position: 0px -720px;
+}
+
+.actor-berserk {
+    background-image: url(../img/actors-good.png);
+    background-position: 0px -1008px;
 }
