@@ -66,11 +66,12 @@
     1 "red"))
  
 ;; actor render component
-(rum/defc actor-component [index army]
+(rum/defc actor-component < rum/reactive [index army]
   (let [cursor (rum/cursor-in army [index])]
-    [:div.actor-container { :style (get-actor-style cursor)}
-      [:div { :class (get-actor-class (get @cursor :template) (get @cursor :teamId))}]
-      [:div.actor-ui [ :span.actor-ui-hp { :class (get-actor-hp-class (get @cursor :teamId)) } (get @cursor :hp ) ]]]))
+    (when (rum/react cursor)
+      [:div.actor-container { :style (get-actor-style cursor)}
+        [:div { :class (get-actor-class (get @cursor :template) (get @cursor :teamId))}]
+        [:div.actor-ui [ :span.actor-ui-hp { :class (get-actor-hp-class (get @cursor :teamId)) } (get @cursor :hp ) ]]])))
 
 ;; full actors renderer component
 (rum/defc grid-actors-component [army]
