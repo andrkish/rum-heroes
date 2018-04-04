@@ -84,3 +84,4 @@
         y (get @state 1)]
     (when (and (rum/react cursor) (grid/correct-cell? x y))
       [:div.grid-hover { :style (get-hover-style x y)}])))
+

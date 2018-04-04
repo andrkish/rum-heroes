@@ -5,7 +5,8 @@ body, html {
 
 body {
     background-color: wheat;
-    background-image: radial-gradient(rgba(0,0,0,0) 40%,rgba(0,0,0,1) 115%), url(../img/background-image.jpg);
+    /*background-image: radial-gradient(rgba(0,0,0,0) 40%,rgba(0,0,0,1) 115%), url(../img/background-image.jpg);*/
+    background-image: url(../img/background-image.jpg);
     background-size: auto, 512px;
 }
 
@@ -31,5 +32,10 @@ body {
     top: 0px;
     left: 0px;
     margin: 12px 12px;
+}
+
+.hover-unit {
+    background-color: gray;
+    width: 200px;
 }
 
