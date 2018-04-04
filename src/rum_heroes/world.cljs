@@ -17,8 +17,15 @@
        (map spawn/spawn-overlay)
        (into {})))
 
-;; setup initial army
+;; setup player initial army
 (defn init-army [count]
   (->> (range 0 count)
        (map spawn/spawn-actor)
        (into {})))
+
+;; setup enemy initial army
+(defn init-enemy-army [count]
+  (->> (range 0 count)
+       (map spawn/spawn-enemy-actor)
+       (into {})))
+

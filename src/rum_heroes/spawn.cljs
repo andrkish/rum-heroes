@@ -23,10 +23,10 @@
               :visual (gen-overlay-tile)}))
 
 ;; get random actor template
-(defn get-good-template []
-  (-> (count actors/actors-good-pack)
+(defn get-actor-template [list]
+  (-> (count list)
       (rand-int)
-      (#(get actors/actors-good-pack %1))))
+      (#(get list %1))))
 
 (defn get-position [n]
   (case n
@@ -36,10 +36,26 @@
     3 { :x 0 :y 4 }
     4 { :x 1 :y 5 }))
 
+(defn get-enemy-position [n]
+  (case n
+    0 { :x (- grid/grid-width 1) :y 1 }
+    1 { :x (- grid/grid-width 1) :y 2 }
+    2 { :x (- grid/grid-width 1) :y 3 }
+    3 { :x (- grid/grid-width 1) :y 4 }
+    4 { :x (- grid/grid-width 1) :y 5 }))
+
 ;; create actor entity 
 (defn spawn-actor [x]
-  (let [template (get-good-template)]
+  (let [template (get-actor-template actors/actors-good-pack)]
     (hash-map (keyword (str (str "army" x)))
               { :pos (get-position x)
+                :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
+                :template template })))
+
+;; create enemy actor entity
+(defn spawn-enemy-actor [x]
+  (let [template (get-actor-template actors/actors-evil-pack)]
+    (hash-map (keyword (str (str "enemy" x)))
+              { :pos (get-enemy-position x)
                 :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
                 :template template })))

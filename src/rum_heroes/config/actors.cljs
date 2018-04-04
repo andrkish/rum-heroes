@@ -1,6 +1,7 @@
 (ns rum-heroes.config.actors)
 
 (defonce actors-good-pack [ "knight" "mage" "archer" "swordman" "berserk" ])
+(defonce actors-evil-pack [ "knight" "mage" "archer" "swordman" "berserk" ])
 
 ;; helper function
 ;; todo: learn about macro? 

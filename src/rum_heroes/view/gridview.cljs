@@ -59,9 +59,7 @@
   (let [cursor (rum/cursor-in army [key])]
     [:div.actor-container { :style (get-actor-style cursor)}
       [:div.actor { :class (get-actor-sprite (get @cursor :template))}]
-      [:div.actor-ui [ :span.actor-ui-hp (get @cursor :hp ) ]]
-      ]))
-
+      [:div.actor-ui [ :span.actor-ui-hp (get @cursor :hp ) ]]]))
 
 ;; full actors renderer component
 (rum/defc grid-actors-component [army]
