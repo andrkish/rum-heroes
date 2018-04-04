@@ -51,8 +51,8 @@
 (rum/defc actor-component [key army]
   (let [cursor (rum/cursor-in army [key])]
     [:div.actor {:class (get-actor-sprite (get @cursor :template))
-                 :style { :left (grid/get-coord-x 1)
-                           :top (grid/get-coord-y 1)}}]))
+                 :style { :left (grid/get-coord-x (get-in @cursor [:pos :x]))
+                           :top (grid/get-coord-y (get-in @cursor [:pos :y]))}}]))
 
 ;; full actors renderer component
 (rum/defc grid-actors-component [army]

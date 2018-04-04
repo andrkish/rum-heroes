@@ -28,8 +28,16 @@
       (rand-int)
       (#(get actors/actors-good-pack %1))))
 
+(defn get-position [n]
+  (case n
+    0 { :x 1 :y 1 }
+    1 { :x 0 :y 2 }
+    2 { :x 1 :y 3 }
+    3 { :x 0 :y 4 }
+    4 { :x 1 :y 5 }))
+
 ;; create actor entity 
 (defn spawn-actor [x]
-  (hash-map (keyword (str ""))
-            { :pos { :x 1 :y 2 }
+  (hash-map (keyword (str (str "army" x)))
+            { :pos (get-position x)
               :template (get-good-template) }))
