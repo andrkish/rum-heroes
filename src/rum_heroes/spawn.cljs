@@ -38,6 +38,8 @@
 
 ;; create actor entity 
 (defn spawn-actor [x]
-  (hash-map (keyword (str (str "army" x)))
-            { :pos (get-position x)
-              :template (get-good-template) }))
+  (let [template (get-good-template)]
+    (hash-map (keyword (str (str "army" x)))
+              { :pos (get-position x)
+                :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
+                :template template })))
