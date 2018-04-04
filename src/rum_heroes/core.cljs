@@ -1,7 +1,20 @@
 (ns rum-heroes.core
-    (:require [rum.core :as rum]))
+  (:require 
+    [rum.core :as rum]
+    [rum-heroes.grid :as grid]
+    [rum-heroes.view.gridview :as gridview]))
 
 (enable-console-print!)
+
+;; all game state
+(defonce grid-state (atom (grid/init-background-grid)))
+(defonce grid-overlay-state (atom (grid/init-background-overlay)))
+
+(rum/mount (gridview/grid-component 12 7 grid-state)
+  (. js/document (getElementById "world")))
+
+(rum/mount (gridview/grid-overlay-component grid-overlay-state)
+  (. js/document (getElementById "world-overlay")))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
