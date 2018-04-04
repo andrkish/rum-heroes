@@ -1,14 +1,14 @@
 (ns rum-heroes.core
   (:require 
     [rum.core :as rum]
-    [rum-heroes.grid :as grid]
+    [rum-heroes.world :as world]
     [rum-heroes.view.gridview :as gridview]))
 
 (enable-console-print!)
 
 ;; all game state
-(defonce grid-state (atom (grid/init-background-grid)))
-(defonce grid-overlay-state (atom (grid/init-background-overlay)))
+(defonce grid-state (atom (world/init-background-grid)))
+(defonce grid-overlay-state (atom (world/init-background-overlay)))
 
 (rum/mount (gridview/grid-component 12 7 grid-state)
   (. js/document (getElementById "world")))

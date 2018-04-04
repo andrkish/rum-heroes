@@ -1,9 +1,5 @@
 (ns rum-heroes.grid)
 
-;; total background tiles sprite count
-(def ^:const grid-back-sprite-count 3)
-(def ^:const grid-overlay-sprite-count 3)
-
 ;; grid tile info
 (def ^:const grid-tile-width 72)
 (def ^:const grid-tile-height 72)
@@ -29,33 +25,6 @@
 (defn get-cell-y [index]
   (quot index grid-width))
 
-;; generate default background tile
-(defn gen-background-tile [x]
-  (rand-int grid-back-sprite-count))
-
-;; generate default overlay tile
-(defn gen-overlay-tile []
-  (rand-int grid-overlay-sprite-count))
-
 ;; check density random
-(defn overlay? [x]
+(defn overlay? [x density]
   (if (<= (rand-int 100) grid-dens) x 0))
-
-;; get initial background grid data
-(defn init-background-grid []
-  (->> (map gen-background-tile (range grid-total))
-       (partition grid-width)
-       (mapv vec)))
-
-;; create overlay entity { k1 : { posX, posY, visual }}
-(defn create-overlay [x]
-  (hash-map (keyword (str "overlay" x))
-            { :posX (get-cell-x x) :posY (get-cell-y x) :visual (gen-overlay-tile)}))
-
-;; setup all initial overlay
-(defn init-background-overlay []
-  (->> (range 0 grid-total)
-       (map overlay?)
-       (remove zero?)
-       (map create-overlay)
-       (into {})))
