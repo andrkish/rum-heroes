@@ -1,6 +1,7 @@
 (ns rum-heroes.view.gridview
   (:require 
     [rum.core :as rum]
+    [rum-heroes.config.actors :as actors]
     [rum-heroes.grid :as grid]))
 
 ;; helpers method for getting sprite
@@ -16,6 +17,10 @@
     1 "forest-overlay-2"
     2 "forest-overlay-3"))
 
+;; get visual sprite from actors template
+(defn get-actor-sprite [key]
+  (get-in actors/actors-template [key :visual] "empty"))
+
 ;; grid tile (cell) renderer component
 (rum/defc grid-tile [x y grid-state]
   (let [cursor (rum/cursor-in grid-state [y x])]
@@ -25,9 +30,9 @@
 ;; grid tile overlay renderer component
 (rum/defc grid-overlay-tile [key state]
   (let [cursor (rum/cursor-in state [key])]
-  [:div.grid-overlay {:class (get-overlay-sprite (get @cursor :visual)) 
-                      :style { :left (grid/get-coord-x (get @cursor :posX))
-                                :top (grid/get-coord-y (get @cursor :posY))}}]))
+    [:div.grid-overlay {:class (get-overlay-sprite (get @cursor :visual)) 
+                        :style { :left (grid/get-coord-x (get @cursor :posX))
+                                  :top (grid/get-coord-y (get @cursor :posY))}}]))
 
 ;; full grid renderer component
 (rum/defc grid-component [w h grid-state]
@@ -41,3 +46,15 @@
 (rum/defc grid-overlay-component [state]
   [ (for [k (keys @state)] 
       (grid-overlay-tile k state))])
+
+;; actor render component
+(rum/defc actor-component [key army]
+  (let [cursor (rum/cursor-in army [key])]
+    [:div.actor {:class "actor-knight"
+                 :style { :left (grid/get-coord-x 1)
+                           :top (grid/get-coord-y 1)}}]))
+
+;; full actors renderer component
+(rum/defc grid-actors-component [army]
+  [ (for [k (keys @army)]
+      (actor-component k army))])

@@ -16,3 +16,9 @@
        (remove zero?)
        (map spawn/spawn-overlay)
        (into {})))
+
+;; setup initial army
+(defn init-army [count]
+  (->> (range 0 count)
+       (map spawn/spawn-actor)
+       (into {})))

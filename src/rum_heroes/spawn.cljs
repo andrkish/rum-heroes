@@ -20,3 +20,9 @@
             { :posX (grid/get-cell-x x)
               :posY (grid/get-cell-y x)
               :visual (gen-overlay-tile)}))
+
+;; create actor entity 
+(defn spawn-actor [x]
+  (hash-map (keyword (str ""))
+            { :pos { :x 1 :y 2 }
+              :template ":knight" }))
