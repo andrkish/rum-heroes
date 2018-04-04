@@ -19,7 +19,7 @@
 
 ;; get visual sprite from actors template
 (defn get-actor-sprite [key]
-  (get-in actors/actors-template [key :visual] "empty"))
+  (get-in actors/actors-template [(keyword key) :visual] "empty"))
 
 ;; grid tile (cell) renderer component
 (rum/defc grid-tile [x y grid-state]
@@ -50,7 +50,7 @@
 ;; actor render component
 (rum/defc actor-component [key army]
   (let [cursor (rum/cursor-in army [key])]
-    [:div.actor {:class "actor-knight"
+    [:div.actor {:class (get-actor-sprite (get @cursor :template))
                  :style { :left (grid/get-coord-x 1)
                            :top (grid/get-coord-y 1)}}]))
 

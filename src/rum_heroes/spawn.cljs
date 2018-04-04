@@ -1,5 +1,6 @@
 (ns rum-heroes.spawn
   (:require
+    [rum-heroes.config.actors :as actors]
     [rum-heroes.grid :as grid]))
 
 ;; sprites info
@@ -21,8 +22,14 @@
               :posY (grid/get-cell-y x)
               :visual (gen-overlay-tile)}))
 
+;; get random actor template
+(defn get-good-template []
+  (-> (count actors/actors-good-pack)
+      (rand-int)
+      (#(get actors/actors-good-pack %1))))
+
 ;; create actor entity 
 (defn spawn-actor [x]
   (hash-map (keyword (str ""))
             { :pos { :x 1 :y 2 }
-              :template ":knight" }))
+              :template (get-good-template) }))
