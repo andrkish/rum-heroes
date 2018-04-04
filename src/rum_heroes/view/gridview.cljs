@@ -66,16 +66,15 @@
     1 "red"))
  
 ;; actor render component
-(rum/defc actor-component [key army]
-  (let [cursor (rum/cursor-in army [key])]
+(rum/defc actor-component [index army]
+  (let [cursor (rum/cursor-in army [index])]
     [:div.actor-container { :style (get-actor-style cursor)}
       [:div { :class (get-actor-class (get @cursor :template) (get @cursor :teamId))}]
       [:div.actor-ui [ :span.actor-ui-hp { :class (get-actor-hp-class (get @cursor :teamId)) } (get @cursor :hp ) ]]]))
 
 ;; full actors renderer component
 (rum/defc grid-actors-component [army]
-  [ (for [k (keys @army)]
-      (actor-component k army))])
+  (map-indexed (fn [i x] [(actor-component i army)]) @army))
 
 ;; tile hover component
 (rum/defc grid-hover-component < rum/reactive [state]

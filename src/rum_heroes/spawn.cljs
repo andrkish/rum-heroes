@@ -47,17 +47,15 @@
 ;; create actor entity 
 (defn spawn-actor [x]
   (let [template (get-actor-template actors/actors-good-pack)]
-    (hash-map (keyword (str (str "army" x)))
-              { :pos (get-position x)
-                :teamId 0
-                :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
-                :template template })))
+    { :pos (get-position x)
+      :teamId 0
+      :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
+      :template template }))
 
 ;; create enemy actor entity
 (defn spawn-enemy-actor [x]
   (let [template (get-actor-template actors/actors-evil-pack)]
-    (hash-map (keyword (str (str "enemy" x)))
-              { :pos (get-enemy-position x)
-                :teamId 1
-                :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
-                :template template })))
+    { :pos (get-enemy-position x)
+      :teamId 1
+      :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
+      :template template }))

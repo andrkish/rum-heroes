@@ -10,7 +10,7 @@
 ;; all game state
 (defonce grid-state (atom (world/init-background-grid)))
 (defonce grid-overlay-state (atom (world/init-background-overlay)))
-(defonce actors-state (atom (merge (world/init-army 5) (world/init-enemy-army 4))))
+(defonce actors-state (atom (into (world/init-army 5) (world/init-enemy-army 4))))
 
 (defonce tile-hover-state (atom [ -1 -1 ]))
 (defonce actor-hover-key-state (atom nil))
