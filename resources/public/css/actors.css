@@ -3,6 +3,7 @@
     height: 72px;
     position: absolute;
     z-index: 100;
+    pointer-events: none;
 }
 
 .actor-ui {

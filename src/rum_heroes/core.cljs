@@ -11,12 +11,20 @@
 (defonce grid-overlay-state (atom (world/init-background-overlay)))
 (defonce actors-state (atom (world/init-army 5)))
 
-(rum/mount (gridview/grid-component 12 7 grid-state)
+(defonce tile-hover-state (atom [ -1 -1 ]))
+
+(rum/mount (gridview/grid-component 12 7 grid-state tile-hover-state)
   (. js/document (getElementById "world")))
 
 (rum/mount [(gridview/grid-overlay-component grid-overlay-state)
             (gridview/grid-actors-component actors-state)]
   (. js/document (getElementById "world-overlay")))
+
+(rum/defc hover-component < rum/reactive []
+  [:h3 "hover: " (rum/react tile-hover-state)])
+
+(rum/mount (hover-component)
+  (. js/document (getElementById "baseUI")))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on

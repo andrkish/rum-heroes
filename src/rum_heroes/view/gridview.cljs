@@ -22,10 +22,11 @@
   (get-in actors/actors-template [(keyword key) :visual] "empty"))
 
 ;; grid tile (cell) renderer component
-(rum/defc grid-tile [x y grid-state]
+(rum/defc grid-tile [x y grid-state tile-hover-state]
   (let [cursor (rum/cursor-in grid-state [y x])]
   [:div.grid-back-tile 
-    {:class (get-back-sprite @cursor)}]))
+    {:class (get-back-sprite @cursor)
+     :on-mouse-over (fn [_] (reset! tile-hover-state [ x y ]))}]))
 
 ;; grid tile overlay renderer component
 (rum/defc grid-overlay-tile [key state]
@@ -35,12 +36,12 @@
                                   :top (grid/get-coord-y (get @cursor :posY))}}]))
 
 ;; full grid renderer component
-(rum/defc grid-component [w h grid-state]
-  [:div.grid 
+(rum/defc grid-component [w h grid-state tile-hover-state]
+  [:div.grid { :on-mouse-out (fn [_] (reset! tile-hover-state [-1 -1]))}
   (for [y (range h)]
     [:div.grid-row
     (for [x (range w)]
-      (grid-tile x y grid-state))])])
+      (grid-tile x y grid-state tile-hover-state))])])
 
 ;; full overlay renderer component
 (rum/defc grid-overlay-component [state]
