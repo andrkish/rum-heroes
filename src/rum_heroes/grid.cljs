@@ -25,6 +25,9 @@
 (defn get-cell-y [index]
   (quot index grid-width))
 
+(defn correct-cell? [x y]
+  (and (>= x 0) (>= y 0) (< x grid-width) (< y grid-height)))
+
 ;; check density random
 (defn overlay? [x density]
   (if (<= (rand-int 100) grid-dens) x 0))

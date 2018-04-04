@@ -18,11 +18,11 @@
     2 "forest-overlay-3"))
 
 ;; grid tile (cell) renderer component
-(rum/defc grid-tile [x y grid-state tile-hover-state]
+(rum/defc grid-tile [x y grid-state on-tile-hover]
   (let [cursor (rum/cursor-in grid-state [y x])]
   [:div.grid-back-tile 
     {:class (get-back-sprite @cursor)
-     :on-mouse-over (fn [_] (reset! tile-hover-state [ x y ]))}]))
+     :on-mouse-over (fn [_] (on-tile-hover x y))}]))
 
 ;; grid tile overlay renderer component
 (rum/defc grid-overlay-tile [key state]
@@ -32,12 +32,12 @@
                                   :top (grid/get-coord-y (get @cursor :posY))}}]))
 
 ;; full grid renderer component
-(rum/defc grid-component [w h grid-state tile-hover-state]
-  [:div.grid { :on-mouse-out (fn [_] (reset! tile-hover-state [-1 -1]))}
+(rum/defc grid-component [w h grid-state on-tile-hover]
+  [:div.grid { :on-mouse-out (fn [_] (on-tile-hover -1 -1))}
   (for [y (range h)]
     [:div.grid-row
     (for [x (range w)]
-      (grid-tile x y grid-state tile-hover-state))])])
+      (grid-tile x y grid-state on-tile-hover))])])
 
 ;; full overlay renderer component
 (rum/defc grid-overlay-component [state]
@@ -49,6 +49,11 @@
   (let [posX (grid/get-coord-x (get-in @cursor [:pos :x]))
         posY (grid/get-coord-y (get-in @cursor [:pos :y]))]
     (hash-map :left posX :top posY )))
+
+(defn get-hover-style [x y]
+  (let [posX (grid/get-coord-x x)
+        posY (grid/get-coord-y y)]
+    (hash-map :left posX :top posY)))
 
 ;; get visual sprite from actors template
 (defn get-actor-class [key teamId]
@@ -71,3 +76,11 @@
 (rum/defc grid-actors-component [army]
   [ (for [k (keys @army)]
       (actor-component k army))])
+
+;; tile hover component
+(rum/defc grid-hover-component < rum/reactive [state]
+  (let [cursor (rum/cursor-in state [] )
+        x (get @state 0)
+        y (get @state 1)]
+    (when (and (rum/react cursor) (grid/correct-cell? x y))
+      [:div.grid-hover { :style (get-hover-style x y)}])))

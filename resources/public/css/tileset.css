@@ -1,3 +1,14 @@
+.grid-hover {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    border-style: dashed;
+    border-width: 2px;
+    border-color: yellow;
+    z-index: 1115;
+    pointer-events: none;
+}
+
 .grid-back-tile {
     display: inline-block;
     margin: -2px 0px;
