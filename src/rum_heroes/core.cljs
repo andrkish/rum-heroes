@@ -32,8 +32,31 @@
       (reset! actor-selected-state actor)
       (reset! moves-state (world/get-neighbors-move (get actor :pos) actors-state)))))
 
+;; moves - list of available moves
+(defn can-move? [x y moves]
+  (some #(= [x y] %) moves))
+
+(defn find-mover [id actors]
+  (->> (map-indexed vector actors)
+       (filter #(= (get-in % [1 :id]) id))
+       (first)))
+
+(defn get-new-pos [x y]
+  (hash-map :x x :y y))
+
+(defn do-move [x y moves]
+  (let [a (find-mover (get-in @actor-selected-state [:id]) @actors-state)]
+    (swap! actors-state assoc-in [ (get a 0) :pos] (get-new-pos x y))
+    (reset! moves-state [])
+    (reset! actor-selected-state '())))
+
+(defn move-actor [x y]
+  (when (can-move? x y @moves-state)
+    (do-move x y @moves-state)))
+
 (defn on-tile-click [x y]
-  (select-actor))
+  (select-actor)
+  (move-actor x y))
 
 (rum/mount (gridview/grid-component 12 7 grid-state on-tile-hover on-tile-click)
   (. js/document (getElementById "world")))

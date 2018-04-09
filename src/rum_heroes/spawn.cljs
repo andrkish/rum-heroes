@@ -3,6 +3,12 @@
     [rum-heroes.config.actors :as actors]
     [rum-heroes.grid :as grid]))
 
+;; setup id counter
+(defonce id-counter (atom 0))
+(defn get-id [] 
+  (swap! id-counter inc)
+  @id-counter)
+
 ;; sprites info
 (def ^:const background-sprite-count 3)
 (def ^:const overlay-sprite-count 3)
@@ -49,6 +55,7 @@
   (let [template (get-actor-template actors/actors-good-pack)]
     { :pos (get-position x)
       :teamId 0
+      :id (get-id)
       :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
       :template template }))
 
@@ -57,5 +64,6 @@
   (let [template (get-actor-template actors/actors-evil-pack)]
     { :pos (get-enemy-position x)
       :teamId 1
+      :id (get-id)
       :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
       :template template }))

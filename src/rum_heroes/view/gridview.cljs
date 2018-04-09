@@ -18,11 +18,12 @@
     2 "forest-overlay-3"))
 
 ;; grid tile (cell) renderer component
-(rum/defc grid-tile [x y grid-state on-tile-hover]
+(rum/defc grid-tile [x y grid-state on-tile-hover on-tile-click]
   (let [cursor (rum/cursor-in grid-state [y x])]
     [:div.grid-back-tile 
       {:class (get-back-sprite @cursor)
-      :on-mouse-over (fn [_] (on-tile-hover x y))}]))
+       :on-click (fn [_] (on-tile-click x y))
+       :on-mouse-over (fn [_] (on-tile-hover x y))}]))
 
 ;; grid tile overlay renderer component
 (rum/defc grid-overlay-tile [key state]
@@ -33,12 +34,11 @@
 
 ;; full grid renderer component
 (rum/defc grid-component [w h grid-state on-tile-hover on-tile-click]
-  [:div.grid { :on-mouse-out (fn [_] (on-tile-hover -1 -1))
-               :on-click (fn [_] (on-tile-click))}
+  [:div.grid { :on-mouse-out (fn [_] (on-tile-hover -1 -1))}
     (for [y (range h)]
       [:div.grid-row
       (for [x (range w)]
-        (grid-tile x y grid-state on-tile-hover))])])
+        (grid-tile x y grid-state on-tile-hover on-tile-click))])])
 
 ;; full overlay renderer component
 (rum/defc grid-overlay-component [state]
