@@ -34,8 +34,11 @@
   (or (not (grid/correct-cell-vec? cell))
       (grid/busy-cell? cell actors)))
 
-(defn get-neighbors-move [x y actors]
-  (let [dirs [[1 0] [0 1] [-1 0] [0 -1]]]
+;; pos - { :x :y }, actors - actos-state atom
+(defn get-neighbors-move [pos actors]
+  (let [ x (get pos :x)
+         y (get pos :y)
+         dirs [[1 0] [0 1] [-1 0] [0 -1]]]
     (->> (map #(apply grid/add-cell-dir [x y %]) dirs)
          (remove #(apply cannot-move? [% actors]))
          (into []))))

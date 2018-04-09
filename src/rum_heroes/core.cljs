@@ -14,6 +14,7 @@
 (defonce actors-state (atom (into (world/init-army 5) (world/init-enemy-army 4))))
 
 (defonce tile-hover-state (atom [ -1 -1 ]))
+(defonce moves-state (atom []))
 (defonce actor-hover-state (atom '()))
 (defonce actor-selected-state (atom '()))
 
@@ -28,7 +29,8 @@
 (defn select-actor []
   (when (not (empty? @actor-hover-state))
     (let [actor (first @actor-hover-state)]
-      (reset! actor-selected-state actor))))
+      (reset! actor-selected-state actor)
+      (reset! moves-state (world/get-neighbors-move (get actor :pos) actors-state)))))
 
 (defn on-tile-click [x y]
   (select-actor))
@@ -41,6 +43,7 @@
   (. js/document (getElementById "world-overlay")))
 
 (rum/mount [(gridview/grid-hover-component tile-hover-state)
+            (gridview/moves-render-component moves-state)
             (gridview/actor-selected-component actor-selected-state)]
   (. js/document (getElementById "world-hover")))
 

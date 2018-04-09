@@ -51,6 +51,11 @@
         posY (grid/get-coord-y (get-in @cursor [:pos :y]))]
     (hash-map :left posX :top posY )))
 
+(defn get-position [x y]
+  (let [posX (grid/get-coord-x x)
+        posY (grid/get-coord-y y)]
+    (hash-map :left posX :top posY)))
+
 (defn get-hover-style [x y]
   (let [posX (grid/get-coord-x x)
         posY (grid/get-coord-y y)]
@@ -86,8 +91,16 @@
     (when (and (rum/react cursor) (grid/correct-cell? x y))
       [:div.grid-hover { :style (get-hover-style x y)}])))
 
-;; actor selected component (state = selected actor)
+;; actor selected component (state = selected actor atom)
 (rum/defc actor-selected-component < rum/reactive [state]
   (let [cursor (rum/cursor-in state [] )]
     (when (and (rum/react cursor) (not (empty? @cursor)))
       [:div.actor-selected { :style (get-position-style cursor)}])))
+
+;; render available moves (state = moves state atom)
+(rum/defc moves-render-component < rum/reactive [state]
+  (let [cursor (rum/cursor-in state [])]
+    (when (and (rum/react cursor) (not (empty? @cursor)))
+      [:div 
+        (for [x @cursor]
+          [:div.move-overlay { :style (get-position (get x 0) (get x 1))}])])))
