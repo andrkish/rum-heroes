@@ -104,3 +104,12 @@
       [:div 
         (for [x @cursor]
           [:div.move-overlay { :style (get-position (get x 0) (get x 1))}])])))
+
+;; render available targets (state = targets state atom)
+(rum/defc targets-render-component < rum/reactive [state]
+  (let [cursor (rum/cursor-in state [])]
+    (when (and (rum/react cursor) (not (empty? @cursor)))
+        (for [x @cursor]
+          (let [posX (get-in x [:pos :x])
+                posY (get-in x [:pos :y])]
+            [:div.enemy-target { :style (get-position posX posY) }])))))

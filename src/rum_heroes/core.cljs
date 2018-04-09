@@ -15,8 +15,10 @@
 
 (defonce tile-hover-state (atom [ -1 -1 ]))
 (defonce moves-state (atom []))
+(defonce targets-state (atom []))
 (defonce actor-hover-state (atom '()))
 (defonce actor-selected-state (atom '()))
+
 
 ;; event handlers from view / ui 
 (defn on-tile-hover [x y]
@@ -30,6 +32,7 @@
   (when (not (empty? @actor-hover-state))
     (let [actor (first @actor-hover-state)]
       (reset! actor-selected-state actor)
+      (reset! targets-state (world/get-targets @actor-selected-state 2 actors-state))
       (reset! moves-state (world/get-neighbors-move (get actor :pos) actors-state)))))
 
 ;; moves - list of available moves
@@ -48,6 +51,7 @@
   (let [a (find-mover (get-in @actor-selected-state [:id]) @actors-state)]
     (swap! actors-state assoc-in [ (get a 0) :pos] (get-new-pos x y))
     (reset! moves-state [])
+    (reset! targets-state [])
     (reset! actor-selected-state '())))
 
 (defn move-actor [x y]
@@ -67,6 +71,7 @@
 
 (rum/mount [(gridview/grid-hover-component tile-hover-state)
             (gridview/moves-render-component moves-state)
+            (gridview/targets-render-component targets-state)
             (gridview/actor-selected-component actor-selected-state)]
   (. js/document (getElementById "world-hover")))
 

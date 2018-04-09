@@ -12,6 +12,15 @@
 ;; grid overlay density percentage
 (def ^:const grid-dens 35)
 
+;; math helpers
+(defn abs [x] (max x (- x)))
+
+;; Chebyshev Distance max(|x1 - x2| |y1 - y2|)
+(defn cheb-distance [pos1 pos2]
+  (let [x1 (get pos1 :x) y1 (get pos1 :y)
+        x2 (get pos2 :x) y2 (get pos2 :y)]
+    (max (abs (- x1 x2)) (abs (- y1 y2)))))
+
 ;; coordinate helpers
 (defn get-coord-x [tileX]
   (* tileX grid-tile-width))

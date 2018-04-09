@@ -34,6 +34,16 @@
     background-image: url(../img/ui-spritesheet.png);
 }
 
+.enemy-target {
+    width: 72px;
+    height: 72px;
+    position: absolute;
+    z-index: 20;
+    background-image: url(../img/ui-spritesheet.png);
+    background-position: -72px 0px;
+    pointer-events: none;
+}
+
 .move-overlay {
     width: 72px;
     height: 72px;

@@ -42,3 +42,18 @@
     (->> (map #(apply grid/add-cell-dir [x y %]) dirs)
          (remove #(apply cannot-move? [% actors]))
          (into []))))
+
+(defn enemy-team? [a1 a2]
+  (not (= (get a1 :teamId)
+          (get a2 :teamId))))
+
+(defn attack-dist? [a1 a2 dist]
+  (<= (grid/cheb-distance (get a1 :pos) (get a2 :pos))
+       dist))
+
+(defn can-attack? [a1 a2 dist]
+  (and (enemy-team? a1 a2)
+       (attack-dist? a1 a2 dist)))
+
+(defn get-targets [actor dist actors]
+  (filter #(apply can-attack? [actor % dist]) @actors))
