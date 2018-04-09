@@ -44,32 +44,26 @@
        (filter #(= (get-in % [1 :id]) id))
        (first)))
 
-(defn get-new-pos [x y]
-  (hash-map :x x :y y))
-
-(defn get-new-hp [hp change]
-  (+ hp change))
-
-(defn do-move [x y moves]
-  (let [a (find-actor (get-in @actor-selected-state [:id]) @actors-state)]
-    (swap! actors-state assoc-in [ (get a 0) :pos] (get-new-pos x y))
+(defn do-move [x y moves actors]
+  (let [a (find-actor (get-in @actor-selected-state [:id]) @actors)]
+    (swap! actors assoc-in [ (get a 0) :pos] (hash-map :x x :y y))
     (reset! moves-state [])
     (reset! targets-state [])
     (reset! actor-selected-state '())))
 
 (defn move-actor [x y]
   (when (can-move? x y @moves-state)
-    (do-move x y @moves-state)))
+    (do-move x y @moves-state actors-state)))
 
 (defn do-damage [id damage actors]
   (let [a (find-actor id @actors)]
     (let [hp (get-in @actors [ (get a 0) :hp ])]
-      (swap! actors assoc-in [ (get a 0) :hp ] (get-new-hp hp damage)))))
+      (swap! actors assoc-in [ (get a 0) :hp ] (- hp damage)))))
 
 (defn do-attack [x y targets actors]
   (let [target (first (filter #(= {:x x :y y} (get-in % [:pos])) @targets))]
     (when (not (empty? target))
-      (do-damage (get-in target [:id]) -2 actors))))
+      (do-damage (get-in target [:id]) 2 actors))))
 
 (defn on-tile-click [x y]
   (do-attack x y targets-state actors-state)
