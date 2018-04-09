@@ -20,9 +20,9 @@
 ;; grid tile (cell) renderer component
 (rum/defc grid-tile [x y grid-state on-tile-hover]
   (let [cursor (rum/cursor-in grid-state [y x])]
-  [:div.grid-back-tile 
-    {:class (get-back-sprite @cursor)
-     :on-mouse-over (fn [_] (on-tile-hover x y))}]))
+    [:div.grid-back-tile 
+      {:class (get-back-sprite @cursor)
+      :on-mouse-over (fn [_] (on-tile-hover x y))}]))
 
 ;; grid tile overlay renderer component
 (rum/defc grid-overlay-tile [key state]
@@ -32,20 +32,21 @@
                                   :top (grid/get-coord-y (get @cursor :posY))}}]))
 
 ;; full grid renderer component
-(rum/defc grid-component [w h grid-state on-tile-hover]
-  [:div.grid { :on-mouse-out (fn [_] (on-tile-hover -1 -1))}
-  (for [y (range h)]
-    [:div.grid-row
-    (for [x (range w)]
-      (grid-tile x y grid-state on-tile-hover))])])
+(rum/defc grid-component [w h grid-state on-tile-hover on-tile-click]
+  [:div.grid { :on-mouse-out (fn [_] (on-tile-hover -1 -1))
+               :on-click (fn [_] (on-tile-click))}
+    (for [y (range h)]
+      [:div.grid-row
+      (for [x (range w)]
+        (grid-tile x y grid-state on-tile-hover))])])
 
 ;; full overlay renderer component
 (rum/defc grid-overlay-component [state]
   [ (for [k (keys @state)] 
       (grid-overlay-tile k state))])
 
-;; helper method 
-(defn get-actor-style [cursor]
+;; helper methods
+(defn get-position-style [cursor]
   (let [posX (grid/get-coord-x (get-in @cursor [:pos :x]))
         posY (grid/get-coord-y (get-in @cursor [:pos :y]))]
     (hash-map :left posX :top posY )))
@@ -69,7 +70,7 @@
 (rum/defc actor-component < rum/reactive [index army]
   (let [cursor (rum/cursor-in army [index])]
     (when (rum/react cursor)
-      [:div.actor-container { :style (get-actor-style cursor)}
+      [:div.actor-container { :style (get-position-style cursor)}
         [:div { :class (get-actor-class (get @cursor :template) (get @cursor :teamId))}]
         [:div.actor-ui [ :span.actor-ui-hp { :class (get-actor-hp-class (get @cursor :teamId)) } (get @cursor :hp ) ]]])))
 
@@ -85,3 +86,8 @@
     (when (and (rum/react cursor) (grid/correct-cell? x y))
       [:div.grid-hover { :style (get-hover-style x y)}])))
 
+;; actor selected component (state = selected actor)
+(rum/defc actor-selected-component < rum/reactive [state]
+  (let [cursor (rum/cursor-in state [] )]
+    (when (and (rum/react cursor) (not (empty? @cursor)))
+      [:div.actor-selected { :style (get-position-style cursor)}])))
