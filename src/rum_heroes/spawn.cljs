@@ -40,7 +40,8 @@
     1 { :x 0 :y 2 }
     2 { :x 1 :y 3 }
     3 { :x 0 :y 4 }
-    4 { :x 1 :y 5 }))
+    4 { :x 1 :y 5 }
+    5 { :x 4 :y 2 }))
 
 (defn get-enemy-position [n]
   (case n
@@ -48,7 +49,8 @@
     1 { :x (- grid/grid-width 1) :y 2 }
     2 { :x (- grid/grid-width 1) :y 3 }
     3 { :x (- grid/grid-width 1) :y 4 }
-    4 { :x (- grid/grid-width 1) :y 5 }))
+    4 { :x (- grid/grid-width 1) :y 5 }
+    5 { :x 6 :y 2 }))
 
 ;; create actor entity 
 (defn spawn-actor [x]

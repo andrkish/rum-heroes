@@ -11,7 +11,7 @@
 ;; all game state
 (defonce grid-state (atom (world/init-background-grid)))
 (defonce grid-overlay-state (atom (world/init-background-overlay)))
-(defonce actors-state (atom (into (world/init-army 5) (world/init-enemy-army 4))))
+(defonce actors-state (atom (into (world/init-army 6) (world/init-enemy-army 6))))
 
 (defonce tile-hover-state (atom [ -1 -1 ]))
 (defonce moves-state (atom []))
@@ -39,7 +39,7 @@
 (defn can-move? [x y moves]
   (some #(= [x y] %) moves))
 
-(defn find-mover [id actors]
+(defn find-actor [id actors]
   (->> (map-indexed vector actors)
        (filter #(= (get-in % [1 :id]) id))
        (first)))
@@ -47,8 +47,11 @@
 (defn get-new-pos [x y]
   (hash-map :x x :y y))
 
+(defn get-new-hp [hp change]
+  (+ hp change))
+
 (defn do-move [x y moves]
-  (let [a (find-mover (get-in @actor-selected-state [:id]) @actors-state)]
+  (let [a (find-actor (get-in @actor-selected-state [:id]) @actors-state)]
     (swap! actors-state assoc-in [ (get a 0) :pos] (get-new-pos x y))
     (reset! moves-state [])
     (reset! targets-state [])
@@ -58,7 +61,18 @@
   (when (can-move? x y @moves-state)
     (do-move x y @moves-state)))
 
+(defn do-damage [id damage actors]
+  (let [a (find-actor id @actors)]
+    (let [hp (get-in @actors [ (get a 0) :hp ])]
+      (swap! actors assoc-in [ (get a 0) :hp ] (get-new-hp hp damage)))))
+
+(defn do-attack [x y targets actors]
+  (let [target (first (filter #(= {:x x :y y} (get-in % [:pos])) @targets))]
+    (when (not (empty? target))
+      (do-damage (get-in target [:id]) -2 actors))))
+
 (defn on-tile-click [x y]
+  (do-attack x y targets-state actors-state)
   (select-actor)
   (move-actor x y))
 
