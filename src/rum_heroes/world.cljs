@@ -29,3 +29,13 @@
        (map spawn/spawn-enemy-actor)
        (into [])))
 
+;; check if cell busy by actor or incorrect
+(defn cannot-move? [cell actors] 
+  (or (not (grid/correct-cell-vec? cell))
+      (grid/busy-cell? cell actors)))
+
+(defn get-neighbors-move [x y actors]
+  (let [dirs [[1 0] [0 1] [-1 0] [0 -1]]]
+    (->> (map #(apply grid/add-cell-dir [x y %]) dirs)
+         (remove #(apply cannot-move? [% actors]))
+         (into []))))
