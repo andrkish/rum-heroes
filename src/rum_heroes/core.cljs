@@ -37,9 +37,10 @@
 (defn select-actor []
   (when (not (empty? @actor-hover-state))
     (let [actor (first @actor-hover-state)]
-      (reset! actor-selected-state actor)
-      (reset! targets-state (world/get-targets @actor-selected-state 2 actors-state))
-      (reset! moves-state (world/get-neighbors-move (get actor :pos) actors-state)))))
+      (when (= @team-turn (get actor :teamId))
+        (reset! actor-selected-state actor)
+        (reset! targets-state (world/get-targets @actor-selected-state 2 actors-state))
+        (reset! moves-state (world/get-neighbors-move (get actor :pos) actors-state))))))
 
 ;; moves - list of available moves
 (defn can-move? [x y moves]
