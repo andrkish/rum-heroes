@@ -70,6 +70,9 @@
   (select-actor)
   (move-actor x y))
 
+(defn on-end-turn-click [_]
+  (js/alert 'ok))
+
 (rum/mount (gridview/grid-component 12 7 grid-state on-tile-hover on-tile-click)
   (. js/document (getElementById "world")))
 
@@ -87,7 +90,8 @@
             (ui/actor-hover-component actor-hover-state)]
   (. js/document (getElementById "leftPanel")))
 
-(rum/mount (ui/tile-hover-component tile-hover-state) 
+(rum/mount [(ui/tile-hover-component tile-hover-state) 
+            (ui/end-turn-button on-end-turn-click)]
   (. js/document (getElementById "worldFooter")))
 
 (defn on-js-reload []

@@ -7,8 +7,13 @@
   (let [cursor (rum/cursor-in state [])
         x (get @cursor 0)
         y (get @cursor 1)]
-    (when (and (rum/react cursor) (>= x 0) (>= y 0))
-      [:h3 (str "x: " x " y: " y)])))
+    (when (rum/react cursor)
+      (if (and (>= x 0) (>= y 0))
+        [:h3 (str "x: " x " y: " y)]
+        [:h3 ""]))))
+
+(rum/defc end-turn-button [on-end-turn-click]
+  [:a.turnButton { :on-click on-end-turn-click } "End Turn"])
 
 (rum/defc actor-hover-component < rum/reactive [actor]
   (let [cursor (rum/cursor-in actor [])]
