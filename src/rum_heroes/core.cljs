@@ -13,6 +13,8 @@
 (defonce grid-overlay-state (atom (world/init-background-overlay)))
 (defonce actors-state (atom (into (world/init-army 6) (world/init-enemy-army 6))))
 
+(defonce team-turn (atom 0))
+
 (defonce tile-hover-state (atom [ -1 -1 ]))
 (defonce moves-state (atom []))
 (defonce targets-state (atom []))
@@ -65,13 +67,16 @@
     (when (not (empty? target))
       (do-damage (get-in target [:id]) 2 actors))))
 
+(defn end-turn []
+  (reset! team-turn (mod (+ @team-turn 1) 2)))
+
 (defn on-tile-click [x y]
   (do-attack x y targets-state actors-state)
   (select-actor)
   (move-actor x y))
 
 (defn on-end-turn-click [_]
-  (js/alert 'ok))
+  (end-turn))
 
 (rum/mount (gridview/grid-component 12 7 grid-state on-tile-hover on-tile-click)
   (. js/document (getElementById "world")))
@@ -86,10 +91,12 @@
             (gridview/actor-selected-component actor-selected-state)]
   (. js/document (getElementById "worldHover")))
 
-(rum/mount (ui/actor-ui-component actor-hover-state actor-selected-state 0)
+(rum/mount [(ui/player-title "Player 1" 0 team-turn)
+            (ui/actor-ui-component actor-hover-state actor-selected-state 0)]
   (. js/document (getElementById "leftPanel")))
 
-(rum/mount [(ui/actor-ui-component actor-hover-state actor-selected-state 1)]
+(rum/mount [(ui/player-title "Player 2" 1 team-turn)
+            (ui/actor-ui-component actor-hover-state actor-selected-state 1)]
   (. js/document (getElementById "rightPanel")))
 
 (rum/mount [(ui/tile-hover-component tile-hover-state) 

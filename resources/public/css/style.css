@@ -107,3 +107,17 @@ body {
 .turnButton:active {
     top:1px;
 }
+
+.title-team0, .title-team1, .title-team0-active, .title-team1-active {
+    text-align: center;
+    width: 80%;
+    margin: 15px 15px auto;
+}
+
+.title-team0-active {
+    border-bottom: 3px solid lightblue;
+}
+
+.title-team1-active {
+    border-bottom: 3px solid darkorange;
+}

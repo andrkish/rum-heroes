@@ -16,6 +16,22 @@
 (rum/defc end-turn-button [on-end-turn-click]
   [:a.turnButton { :on-click on-end-turn-click } "End Turn"])
 
+(defn get-title-class [teamId team-turn]
+  (if (= teamId team-turn)
+    (case teamId
+      0 "title-team0-active"
+      1 "title-team1-active")
+    (case teamId
+      0 "title-team0"
+      1 "title-team1")))
+
+
+(rum/defc player-title < rum/reactive [name teamId team-turn] 
+  (let [cursor (rum/cursor-in team-turn [])]
+    (when (rum/react cursor)
+      [:div { :class (get-title-class teamId @team-turn) }
+              name (when (= teamId @team-turn) " moving...")])))
+
 (defn get-actor [selected hover teamId]
   (if (and (not (empty? hover)) (= teamId (get hover :teamId)))
     hover 
