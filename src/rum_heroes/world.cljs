@@ -53,7 +53,8 @@
 
 (defn can-attack? [a1 a2 dist]
   (and (enemy-team? a1 a2)
-       (attack-dist? a1 a2 dist)))
+       (attack-dist? a1 a2 dist)
+       (> (get a2 :hp ) 0)))
 
 (defn get-targets [actor dist actors]
   (filter #(apply can-attack? [actor % dist]) @actors))

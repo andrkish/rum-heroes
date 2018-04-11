@@ -38,6 +38,11 @@
     transform: scaleX(-1);
 }
 
+.actor-dead {
+    transform: scaleY(0.8);
+    filter: saturate(15%);
+}
+
 .actor-knight {
     background-image: url(../img/actors-good.png);
     background-position: 0px -144px;

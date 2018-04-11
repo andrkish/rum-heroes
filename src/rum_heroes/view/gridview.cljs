@@ -62,9 +62,12 @@
     (hash-map :left posX :top posY)))
 
 ;; get visual sprite from actors template
-(defn get-actor-class [key teamId]
+(defn get-actor-class [key teamId hp]
   (let [actor-sprite (get-in actors/actors-template [(keyword key) :visual] "empty")]
-    (str "actor " (when (> teamId 0) "actor-enemy ") actor-sprite)))
+    (str "actor " 
+         (when (<= hp 0) "actor-dead ")
+         (when (> teamId 0) "actor-enemy ") 
+         actor-sprite)))
 
 (defn get-actor-hp-class [teamId]
   (case teamId
@@ -76,8 +79,13 @@
   (let [cursor (rum/cursor-in army [index])]
     (when (rum/react cursor)
       [:div.actor-container { :style (get-position-style cursor)}
-        [:div { :class (get-actor-class (get @cursor :template) (get @cursor :teamId))}]
-        [:div.actor-ui [ :span.actor-ui-hp { :class (get-actor-hp-class (get @cursor :teamId)) } (get @cursor :hp ) ]]])))
+        [:div { :class (get-actor-class (get @cursor :template) 
+                                        (get @cursor :teamId)
+                                        (get @cursor :hp))}]
+        (when (> (get @cursor :hp) 0)
+          [:div.actor-ui
+            [ :span.actor-ui-hp { :class (get-actor-hp-class (get @cursor :teamId)) }
+                                  (get @cursor :hp ) ]])])))
 
 ;; full actors renderer component
 (rum/defc grid-actors-component [army]

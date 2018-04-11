@@ -23,11 +23,15 @@
 
 
 ;; event handlers from view / ui 
+(defn hover-actor? [x y actor] 
+  (and (= { :x x :y y } (get actor :pos))
+       (> (get actor :hp) 0)))
+
 (defn on-tile-hover [x y]
   (reset! tile-hover-state [x y])
   (when (grid/correct-cell? x y))
     (reset! actor-hover-state 
-            (filter (fn [el] (= { :x x :y y } (get el :pos))) @actors-state)))
+            (filter #(apply hover-actor? [x y %]) @actors-state)))
 
 ;; select own actor on click event handler
 (defn select-actor []
