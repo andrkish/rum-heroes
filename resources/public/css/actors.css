@@ -20,12 +20,12 @@
     font-size: 10px;
 }
 
-.green {
-    background-color: greenyellow;
+.team0 {
+    background-color: lightblue;
 }
 
-.red {
-    background-color: red;
+.team1 {
+    background-color: darkorange;
 }
 
 .actor {
@@ -61,4 +61,29 @@
 .actor-berserk {
     background-image: url(../img/actors-good.png);
     background-position: 0px -1008px;
+}
+
+.actor-rider {
+    background-image: url(../img/actors-evil.png);
+    background-position: 0px -72px;
+}
+
+.actor-sniper {
+    background-image: url(../img/actors-evil.png);
+    background-position: 0px -216px;
+}
+
+.actor-warlock {
+    background-image: url(../img/actors-evil.png);
+    background-position: 0px -1584px;
+}
+
+.actor-skeleton {
+    background-image: url(../img/actors-evil.png);
+    background-position: 0px -2592px;
+}
+
+.actor-werewolf {
+    background-image: url(../img/actors-evil.png);
+    background-position: 0px -2664px;
 }

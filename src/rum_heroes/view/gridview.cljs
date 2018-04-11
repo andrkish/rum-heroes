@@ -68,8 +68,8 @@
 
 (defn get-actor-hp-class [teamId]
   (case teamId
-    0 "green" 
-    1 "red"))
+    0 "team0" 
+    1 "team1"))
  
 ;; actor render component
 (rum/defc actor-component < rum/reactive [index army]
