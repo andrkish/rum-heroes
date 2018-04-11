@@ -75,18 +75,20 @@
 
 (rum/mount [(gridview/grid-overlay-component grid-overlay-state)
             (gridview/grid-actors-component actors-state)]
-  (. js/document (getElementById "world-overlay")))
+  (. js/document (getElementById "worldOverlay")))
 
 (rum/mount [(gridview/grid-hover-component tile-hover-state)
             (gridview/moves-render-component moves-state)
             (gridview/targets-render-component targets-state)
             (gridview/actor-selected-component actor-selected-state)]
-  (. js/document (getElementById "world-hover")))
+  (. js/document (getElementById "worldHover")))
 
-(rum/mount [(ui/tile-hover-component tile-hover-state) 
-            (ui/actor-selected-component actor-selected-state)
+(rum/mount [(ui/actor-selected-component actor-selected-state)
             (ui/actor-hover-component actor-hover-state)]
-  (. js/document (getElementById "baseUI")))
+  (. js/document (getElementById "leftPanel")))
+
+(rum/mount (ui/tile-hover-component tile-hover-state) 
+  (. js/document (getElementById "worldFooter")))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on

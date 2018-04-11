@@ -48,6 +48,7 @@
     width: 72px;
     height: 72px;
     position: absolute;
+    margin: 2px;
     z-index: 2000;
     background-image: url(../img/ui-spritesheet.png);
     background-position: -144px 0px;

@@ -1,6 +1,12 @@
-/* some style */
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
 body, html {
     height: 100%;
+    margin: 0px;
+    padding: 0px;
 }
 
 body {
@@ -10,14 +16,43 @@ body {
     background-size: auto, 512px;
 }
 
-.world-wrapper {
+.title {
+    text-align: center;
+    letter-spacing: 10px;
+    margin: 10px 0px 15px 0px;
+    color: goldenrod;
+    text-shadow: 3px 2px #222222;
+}
+
+#container {
+    width: 1400px;
+    margin: 0px auto;
+}
+
+#leftPanel, #rightPanel {
+    width: 220px;
+    height: 290px;
+    background-image: url(../img/paperback.png);
+    float: left;
+}
+
+#leftPanel {
+    margin: 0px 0px 0px 0px; 
+}
+
+#rightPanel {
+    margin: 0px 0px 0px 40px; 
+}
+
+#worldWrapper {
+    float: left;
     width: 864px;
     height: 504px;
     position: relative;
-    margin: 30px auto 0;
+    margin: 0px 0px 0px 0px;
 }
 
-.world {
+#world {
     width: 864px;
     height: 504px;
     background: #888888;
@@ -27,11 +62,19 @@ body {
     overflow: hidden;
 }
 
-.world-overlay {
+#worldOverlay, #worldHover {
     position: absolute;
     top: 0px;
     left: 0px;
     margin: 12px 12px;
+}
+
+#footer {
+    clear: both;
+}
+
+#worldFooter h3 {
+    margin: 8px;
 }
 
 .hover-unit {
@@ -39,3 +82,24 @@ body {
     width: 200px;
 }
 
+.turnButton {
+    background-color:#006377;
+    border-radius:3px;
+    border:1px solid #124d77;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:13px;
+    padding:7px 30px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #154682;
+    box-shadow: 4px 4px 6px #222222;
+}
+.turnButton:hover {
+    background-color:#0061a7;
+}
+.turnButton:active {
+    position:relative;
+    top:1px;
+}
