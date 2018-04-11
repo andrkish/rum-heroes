@@ -40,14 +40,15 @@
 (defn get-actor-body [actor teamId]
   (when (and (not (empty? actor)) (= teamId (get actor :teamId)))
     (let [t (get actors/actors-template (keyword (get actor :template)))]
-      [:div.hover-unit
-        [ :div "SELECTED UNIT "]
-        [ :div "template: " (get actor :template)]
-        [ :div "damage: " (get t :damage)]
-        [ :div "range: " (get t :range)]
-        [ :div "moves: " (get t :moves)]
-        [ :div "hp: " (get t :hpMax)]
-        [ :div "teamId: " (get actor :teamId)]])))
+      [:div.actor-panel-ui
+        [ :div.actor-avatar
+          [ :div.actor-image { :class (get t :visual) }]]
+        [ :div.actor-params
+          [ :div (get actor :template)]
+          [ :div "damage: " (get t :damage)]
+          [ :div "range: " (get t :range)]
+          [ :div "moves: " (get t :moves)]
+          [ :div "hp: " (get t :hpMax)]]])))
 
 (rum/defc actor-ui-component < rum/reactive [hover selected teamId]
   (let [hc (rum/cursor-in hover [])

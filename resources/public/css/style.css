@@ -79,9 +79,24 @@ body {
     display: inline-block;
 }
 
-.hover-unit {
-    background-color: gray;
-    width: 100px;
+.actor-panel-ui {
+    width: 170px;
+    margin: 10px 20px auto;
+}
+
+.actor-avatar {
+    display: inline-block;
+    width: 80px;
+}
+
+.actor-image {
+    width: 72px;
+    height: 72px;
+}
+
+.actor-params {
+    width: 80px;
+    display: inline-block;
 }
 
 .turnButton {
