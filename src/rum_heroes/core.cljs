@@ -86,9 +86,11 @@
             (gridview/actor-selected-component actor-selected-state)]
   (. js/document (getElementById "worldHover")))
 
-(rum/mount [(ui/actor-selected-component actor-selected-state)
-            (ui/actor-hover-component actor-hover-state)]
+(rum/mount (ui/actor-ui-component actor-hover-state actor-selected-state 0)
   (. js/document (getElementById "leftPanel")))
+
+(rum/mount [(ui/actor-ui-component actor-hover-state actor-selected-state 1)]
+  (. js/document (getElementById "rightPanel")))
 
 (rum/mount [(ui/tile-hover-component tile-hover-state) 
             (ui/end-turn-button on-end-turn-click)]
