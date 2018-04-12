@@ -43,6 +43,11 @@
   (reset! moves-state [])
   (reset! targets-state []))
 
+(defn select-first-actor []
+  (let [a (battle/find-idle-actor @actors-state @team-turn)]
+    (when (not (empty? a))
+      (select-actor (get a 1)))))
+
 (defn select-hover-actor []
   (when (not (empty? @actor-hover-state))
     (let [actor (first @actor-hover-state)]
@@ -72,7 +77,8 @@
 (defn end-turn []
   (unselect-actor)
   (reset! team-turn (mod (+ @team-turn 1) 2))
-  (battle/actors-swap-turn actors-state @team-turn))
+  (battle/actors-swap-turn actors-state @team-turn)
+  (select-first-actor))
 
 (defn on-tile-click [x y]
   (do-attack x y targets-state actors-state)
@@ -106,6 +112,8 @@
 (rum/mount [(ui/tile-hover-component tile-hover-state) 
             (ui/end-turn-button on-end-turn-click)]
   (. js/document (getElementById "worldFooter")))
+
+(select-first-actor) 
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on

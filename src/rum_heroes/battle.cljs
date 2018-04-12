@@ -10,10 +10,17 @@
        (filter #(= (get-in % [1 :id]) id))
        (first)))
 
+(defn find-idle-actor [actors teamId] 
+  (->> (map-indexed vector actors)
+       (filter #(and (= (get-in % [1 :teamId]) teamId)
+                     (> (get-in % [1 :actions :moves]) 0)))
+       (first)))
+
 (defn actors-swap-turn [actors teamId]
   (doseq [[a i] (map vector @actors (range))]
     (swap! actors assoc-in [ i :actions ]
-          (spawn/get-actions (= (get a :teamId) teamId)
+          (spawn/get-actions (and (= (get a :teamId) teamId)
+                                  (> (get a :hp) 0))
                              (actors/get-template a)))))
 
 (defn hover-actor? [x y actor] 
