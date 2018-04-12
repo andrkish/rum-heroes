@@ -25,14 +25,30 @@
   (or (not (grid/correct-cell-vec? cell))
       (grid/busy-cell? cell actors)))
 
-;; pos - { :x :y }, actors - actos-state atom
-(defn get-neighbors-move [pos actors]
-  (let [ x (get pos :x)
-         y (get pos :y)
-         dirs [[1 0] [0 1] [-1 0] [0 -1]]]
-    (->> (map #(apply grid/add-cell-dir [x y %]) dirs)
-         (remove #(apply cannot-move? [% actors]))
-         (into []))))
+;; 4 directions - north, south, west, south
+(defn get-dirs []
+  [[1 0] [0 1] [-1 0] [0 -1]])
+
+;; get adjacent cells for moves
+(defn get-cells [x y actors dirs]
+  (->> (map #(apply grid/add-cell-dir [x y %]) dirs)
+       (remove #(apply cannot-move? [% actors]))
+       (into #{})))
+
+;; get adjacent cells from list of cells 
+(defn get-cells-list [list actors dirs]
+  (reduce clojure.set/union 
+    (map (fn [n] (get-cells (get n 0) (get n 1) actors dirs)) list)))
+
+(defn get-neighbors-move [pos d actors]
+  (loop [visited (into #{} (get-cells (get pos :x) (get pos :y) actors (get-dirs)))
+         depth (dec d)
+         a actors]
+    (if (zero? depth)
+      (into [] visited)
+      (recur (clojure.set/union visited (get-cells-list visited actors (get-dirs)))
+             (dec depth)
+             a))))
 
 (defn enemy-team? [a1 a2]
   (not (= (get a1 :teamId)

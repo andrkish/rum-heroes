@@ -34,7 +34,9 @@
 (defn select-actor [actor]
   (reset! actor-selected-state actor)
   (reset! targets-state (battle/get-targets actor actors-state))
-  (reset! moves-state (battle/get-neighbors-move (get actor :pos) actors-state)))
+  (reset! moves-state (battle/get-neighbors-move (get actor :pos) 
+                                                 (get-in actor [:actions :moves])
+                                                  actors-state)))
 
 (defn unselect-actor []
   (reset! actor-selected-state '())
