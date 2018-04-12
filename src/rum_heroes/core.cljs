@@ -45,20 +45,31 @@
 
 (defn select-first-actor []
   (let [a (battle/find-idle-actor @actors-state @team-turn)]
-    (when (not (empty? a))
+    (if (not (empty? a))
+      (select-actor (get a 1))
+      (unselect-actor))))
+
+(defn re-select []
+  (let [a (battle/find-actor (get-in @actor-selected-state [:id]) @actors-state)
+        targets (count (battle/get-targets (get a 1) actors-state))
+        moves (get-in (get a 1) [:actions :moves])]
+    (if (and (<= moves 0) (<= targets 0))
+      (select-first-actor)
       (select-actor (get a 1)))))
 
 (defn select-hover-actor []
   (when (not (empty? @actor-hover-state))
     (let [actor (first @actor-hover-state)]
-      (when (= @team-turn (get actor :teamId))
+      (when (and (= @team-turn (get actor :teamId))
+                 (or (> (get-in actor [:actions :moves]) 0)
+                     (> (get-in actor [:actions :attacks]) 0)))
         (select-actor actor)))))
 
 (defn do-move [x y moves actors]
   (let [a (battle/find-actor (get-in @actor-selected-state [:id]) @actors)]
     (swap! actors assoc-in [ (get a 0) :pos] (hash-map :x x :y y))
     (swap! actors assoc-in [ (get a 0) :actions :moves] 0)
-    (unselect-actor)))
+    (re-select)))
 
 (defn move-actor [x y]
   (when (battle/can-move? x y @moves-state)
@@ -72,7 +83,8 @@
           damage (get (actors/get-template (get a 1)) :damage)]
       (when (not (empty? target))
         (battle/do-damage (get-in target [:id]) damage actors)
-        (swap! actors assoc-in [ (get a 0) :actions :attacks] 0)))))
+        (swap! actors assoc-in [ (get a 0) :actions :attacks] 0)
+        (re-select)))))
 
 (defn end-turn []
   (unselect-actor)
