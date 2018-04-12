@@ -41,14 +41,15 @@
     (map (fn [n] (get-cells (get n 0) (get n 1) actors dirs)) list)))
 
 (defn get-neighbors-move [pos d actors]
-  (loop [visited (into #{} (get-cells (get pos :x) (get pos :y) actors (get-dirs)))
-         depth (dec d)
-         a actors]
-    (if (zero? depth)
-      (into [] visited)
-      (recur (clojure.set/union visited (get-cells-list visited actors (get-dirs)))
-             (dec depth)
-             a))))
+  (when (> d 0)
+    (loop [visited (into #{} (get-cells (get pos :x) (get pos :y) actors (get-dirs)))
+          depth (dec d)
+          a actors]
+      (if (zero? depth)
+        (into [] visited)
+        (recur (clojure.set/union visited (get-cells-list visited actors (get-dirs)))
+              (dec depth)
+              a)))))
 
 (defn enemy-team? [a1 a2]
   (not (= (get a1 :teamId)
@@ -64,9 +65,10 @@
        (> (get a2 :hp ) 0)))
 
 (defn get-targets [actor actors]
-  (let [t (actors/get-template actor)
-        range (get t :range)]
-    (filter #(apply can-attack? [actor % range]) @actors)))
+  (when (> (get-in actor [:actions :attacks]) 0)
+    (let [t (actors/get-template actor)
+          range (get t :range)]
+      (filter #(apply can-attack? [actor % range]) @actors))))
 
 (defn can-move? [x y moves]
   (some #(= [x y] %) moves))

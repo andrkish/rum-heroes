@@ -79,9 +79,11 @@
   (let [cursor (rum/cursor-in army [index])]
     (when (rum/react cursor)
       [:div.actor-container { :style (get-position-style cursor)}
-        (when (> (get-in @cursor [:actions :moves]) 0)
+        (when (and (> (get-in @cursor [:actions :moves]) 0)
+                   (> (get @cursor :hp) 0))
           [:div.actor-ui-ap ])
-        (when (> (get-in @cursor [:actions :attacks]) 0)
+        (when (and (> (get-in @cursor [:actions :attacks]) 0)
+                   (> (get @cursor :hp) 0))
           [:div.actor-ui-attack])
         [:div { :class (get-actor-class (get @cursor :template) 
                                         (get @cursor :teamId)

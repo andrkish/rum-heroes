@@ -52,6 +52,7 @@
 (defn do-move [x y moves actors]
   (let [a (battle/find-actor (get-in @actor-selected-state [:id]) @actors)]
     (swap! actors assoc-in [ (get a 0) :pos] (hash-map :x x :y y))
+    (swap! actors assoc-in [ (get a 0) :actions :moves] 0)
     (unselect-actor)))
 
 (defn move-actor [x y]
@@ -59,11 +60,14 @@
     (do-move x y @moves-state actors-state)))
 
 (defn do-attack [x y targets actors]
-  (when (not (empty? @actor-selected-state))
+  (when (and (not (empty? @actor-selected-state))
+             (> (get-in @actor-selected-state [:actions :attacks]) 0))
     (let [target (first (filter #(= {:x x :y y} (get-in % [:pos])) @targets))
-          damage (get (actors/get-template @actor-selected-state) :damage)]
+          a (battle/find-actor (get-in @actor-selected-state [:id]) @actors)
+          damage (get (actors/get-template (get a 1)) :damage)]
       (when (not (empty? target))
-        (battle/do-damage (get-in target [:id]) damage actors)))))
+        (battle/do-damage (get-in target [:id]) damage actors)
+        (swap! actors assoc-in [ (get a 0) :actions :attacks] 0)))))
 
 (defn end-turn []
   (unselect-actor)
