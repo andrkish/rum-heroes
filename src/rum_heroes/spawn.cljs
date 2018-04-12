@@ -29,7 +29,7 @@
               :visual (gen-overlay-tile)}))
 
 ;; get random actor template
-(defn get-actor-template [list]
+(defn get-rnd-actor-template [list]
   (-> (count list)
       (rand-int)
       (#(get list %1))))
@@ -56,24 +56,21 @@
   { :moves (get template :moves)
     :attacks (get template :attacks) })
 
-;; create actor entity 
-(defn spawn-actor [x]
-  (let [tkey (get-actor-template actors/actors-good-pack)
-        t (get actors/actors-template (keyword tkey))]
-    { :pos (get-position x)
+(defn spawn-from-template [x teamId tkey]
+  (let [t (get actors/actors-template (keyword tkey))]
+    { :pos (case teamId
+                 0 (get-position x)
+                 1 (get-enemy-position x))
       :actions (get-actions t)
-      :teamId 0
+      :teamId teamId
       :id (get-id)
       :hp (get t :hpMax -1)
       :template tkey }))
 
+;; create actor entity 
+(defn spawn-actor [x]
+  (spawn-from-template x 0 (get-rnd-actor-template actors/actors-good-pack)))
+
 ;; create enemy actor entity
 (defn spawn-enemy-actor [x]
-  (let [tkey (get-actor-template actors/actors-evil-pack)
-        t (get actors/actors-template (keyword tkey))]
-    { :pos (get-enemy-position x)
-      :teamId 1
-      :actions (get-actions t)
-      :id (get-id)
-      :hp (get t :hpMax -1)
-      :template tkey }))
+  (spawn-from-template x 1 (get-rnd-actor-template actors/actors-evil-pack)))
