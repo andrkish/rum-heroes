@@ -4,6 +4,7 @@
     [rum-heroes.world :as world]
     [rum-heroes.battle :as battle]
     [rum-heroes.grid :as grid]
+    [rum-heroes.config.actors :as actors]
     [rum-heroes.view.uiview :as ui]
     [rum-heroes.view.gridview :as gridview]))
 
@@ -56,9 +57,11 @@
     (do-move x y @moves-state actors-state)))
 
 (defn do-attack [x y targets actors]
-  (let [target (first (filter #(= {:x x :y y} (get-in % [:pos])) @targets))]
-    (when (not (empty? target))
-      (battle/do-damage (get-in target [:id]) 2 actors))))
+  (when (not (empty? @actor-selected-state))
+    (let [target (first (filter #(= {:x x :y y} (get-in % [:pos])) @targets))
+          damage (get (actors/get-template @actor-selected-state) :damage)]
+      (when (not (empty? target))
+        (battle/do-damage (get-in target [:id]) damage actors)))))
 
 (defn end-turn []
   (unselect-actor)
