@@ -2,6 +2,7 @@
   (:require 
     [rum.core :as rum]
     [rum-heroes.world :as world]
+    [rum-heroes.battle :as battle]
     [rum-heroes.grid :as grid]
     [rum-heroes.view.uiview :as ui]
     [rum-heroes.view.gridview :as gridview]))
@@ -21,17 +22,12 @@
 (defonce actor-hover-state (atom '()))
 (defonce actor-selected-state (atom '()))
 
-
 ;; event handlers from view / ui 
-(defn hover-actor? [x y actor] 
-  (and (= { :x x :y y } (get actor :pos))
-       (> (get actor :hp) 0)))
-
 (defn on-tile-hover [x y]
   (reset! tile-hover-state [x y])
   (when (grid/correct-cell? x y))
     (reset! actor-hover-state 
-            (filter #(apply hover-actor? [x y %]) @actors-state)))
+            (filter #(apply battle/hover-actor? [x y %]) @actors-state)))
 
 ;; select own actor on click event handler
 (defn select-actor []
@@ -39,38 +35,24 @@
     (let [actor (first @actor-hover-state)]
       (when (= @team-turn (get actor :teamId))
         (reset! actor-selected-state actor)
-        (reset! targets-state (world/get-targets @actor-selected-state 2 actors-state))
-        (reset! moves-state (world/get-neighbors-move (get actor :pos) actors-state))))))
-
-;; moves - list of available moves
-(defn can-move? [x y moves]
-  (some #(= [x y] %) moves))
-
-(defn find-actor [id actors]
-  (->> (map-indexed vector actors)
-       (filter #(= (get-in % [1 :id]) id))
-       (first)))
+        (reset! targets-state (battle/get-targets @actor-selected-state 2 actors-state))
+        (reset! moves-state (battle/get-neighbors-move (get actor :pos) actors-state))))))
 
 (defn do-move [x y moves actors]
-  (let [a (find-actor (get-in @actor-selected-state [:id]) @actors)]
+  (let [a (battle/find-actor (get-in @actor-selected-state [:id]) @actors)]
     (swap! actors assoc-in [ (get a 0) :pos] (hash-map :x x :y y))
     (reset! moves-state [])
     (reset! targets-state [])
     (reset! actor-selected-state '())))
 
 (defn move-actor [x y]
-  (when (can-move? x y @moves-state)
+  (when (battle/can-move? x y @moves-state)
     (do-move x y @moves-state actors-state)))
-
-(defn do-damage [id damage actors]
-  (let [a (find-actor id @actors)]
-    (let [hp (get-in @actors [ (get a 0) :hp ])]
-      (swap! actors assoc-in [ (get a 0) :hp ] (- hp damage)))))
 
 (defn do-attack [x y targets actors]
   (let [target (first (filter #(= {:x x :y y} (get-in % [:pos])) @targets))]
     (when (not (empty? target))
-      (do-damage (get-in target [:id]) 2 actors))))
+      (battle/do-damage (get-in target [:id]) 2 actors))))
 
 (defn end-turn []
   (reset! team-turn (mod (+ @team-turn 1) 2)))
