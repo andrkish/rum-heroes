@@ -52,16 +52,19 @@
     4 { :x (- grid/grid-width 1) :y 5 }
     5 { :x 6 :y 2 }))
 
-(defn get-actions [template]
-  { :moves (get template :moves)
-    :attacks (get template :attacks) })
+(defn get-actions [fill? template]
+  (if fill?
+    { :moves (get template :moves)
+      :attacks (get template :attacks) }
+    { :moves 0 
+      :attacks 0 }))
 
 (defn spawn-from-template [x teamId tkey]
   (let [t (get actors/actors-template (keyword tkey))]
     { :pos (case teamId
                  0 (get-position x)
                  1 (get-enemy-position x))
-      :actions (get-actions t)
+      :actions (get-actions (= 0 teamId) t)
       :teamId teamId
       :id (get-id)
       :hp (get t :hpMax -1)

@@ -65,7 +65,8 @@
 
 (defn end-turn []
   (unselect-actor)
-  (reset! team-turn (mod (+ @team-turn 1) 2)))
+  (reset! team-turn (mod (+ @team-turn 1) 2))
+  (battle/actors-swap-turn actors-state @team-turn))
 
 (defn on-tile-click [x y]
   (do-attack x y targets-state actors-state)

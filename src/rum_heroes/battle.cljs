@@ -1,6 +1,7 @@
 (ns rum-heroes.battle
   (:require 
     [rum-heroes.config.actors :as actors]
+    [rum-heroes.spawn :as spawn]
     [rum-heroes.grid :as grid]))
 
 ;; find actor by ID from actors-state
@@ -8,6 +9,15 @@
   (->> (map-indexed vector actors)
        (filter #(= (get-in % [1 :id]) id))
        (first)))
+
+(defn ttt [actors] 
+  (map-indexed (fn [i a] (js/alert a)) @actors))
+
+(defn actors-swap-turn [actors teamId]
+  (doseq [[a i] (map vector @actors (range))]
+    (swap! actors assoc-in [ i :actions ]
+          (spawn/get-actions (= (get a :teamId) teamId)
+                             (actors/get-template a)))))
 
 (defn hover-actor? [x y actor] 
   (and (= { :x x :y y } (get actor :pos))

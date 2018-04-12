@@ -6,8 +6,27 @@
     pointer-events: none;
 }
 
-.actor-ui {
+.actor-ui, .actor-ui-ap, .actor-ui-attack {
     z-index: 500;
+    pointer-events: none;
+}
+
+.actor-ui-ap {
+    position: absolute;
+    width: 5px;
+    height: 3px;
+    top: 65px;
+    left: 5px;
+    background-color: greenyellow;
+}
+
+.actor-ui-attack {
+    position: absolute;
+    width: 5px;
+    height: 3px;
+    top: 69px;
+    left: 5px;
+    background-color: firebrick;
 }
 
 .actor-ui-hp {
