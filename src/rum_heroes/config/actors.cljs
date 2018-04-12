@@ -14,6 +14,10 @@
           :moves moves
           :hpMax hpMax }))
 
+;; get static template from actor entity
+(defn get-template [actor]
+  (get actors-template (keyword (get actor :template))))
+
 (def actors-template 
   (into {} 
     [(create-template :knight "actor-knight" 15 3 1 3)

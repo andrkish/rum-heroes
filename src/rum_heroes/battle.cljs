@@ -1,5 +1,6 @@
 (ns rum-heroes.battle
   (:require 
+    [rum-heroes.config.actors :as actors]
     [rum-heroes.grid :as grid]))
 
 ;; find actor by ID from actors-state
@@ -39,8 +40,10 @@
        (attack-dist? a1 a2 dist)
        (> (get a2 :hp ) 0)))
 
-(defn get-targets [actor dist actors]
-  (filter #(apply can-attack? [actor % dist]) @actors))
+(defn get-targets [actor actors]
+  (let [t (actors/get-template actor)
+        range (get t :range)]
+    (filter #(apply can-attack? [actor % range]) @actors)))
 
 (defn can-move? [x y moves]
   (some #(= [x y] %) moves))

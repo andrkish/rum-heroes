@@ -32,7 +32,7 @@
 ;; select own actor on click event handler
 (defn select-actor [actor]
   (reset! actor-selected-state actor)
-  (reset! targets-state (battle/get-targets actor 2 actors-state))
+  (reset! targets-state (battle/get-targets actor actors-state))
   (reset! moves-state (battle/get-neighbors-move (get actor :pos) actors-state)))
 
 (defn unselect-actor []

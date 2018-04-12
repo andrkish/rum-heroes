@@ -39,7 +39,7 @@
 
 (defn get-actor-body [actor teamId]
   (when (and (not (empty? actor)) (= teamId (get actor :teamId)))
-    (let [t (get actors/actors-template (keyword (get actor :template)))]
+    (let [t (actors/get-template actor)]
       [:div.actor-panel-ui
         [ :div.actor-avatar
           [ :div.actor-image { :class (get t :visual) }]]
