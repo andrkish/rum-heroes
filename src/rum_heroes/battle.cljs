@@ -10,9 +10,6 @@
        (filter #(= (get-in % [1 :id]) id))
        (first)))
 
-(defn ttt [actors] 
-  (map-indexed (fn [i a] (js/alert a)) @actors))
-
 (defn actors-swap-turn [actors teamId]
   (doseq [[a i] (map vector @actors (range))]
     (swap! actors assoc-in [ i :actions ]
