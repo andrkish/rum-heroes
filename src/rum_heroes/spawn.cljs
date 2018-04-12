@@ -52,20 +52,28 @@
     4 { :x (- grid/grid-width 1) :y 5 }
     5 { :x 6 :y 2 }))
 
+(defn get-actions [template]
+  { :moves (get template :moves)
+    :attacks (get template :attacks) })
+
 ;; create actor entity 
 (defn spawn-actor [x]
-  (let [template (get-actor-template actors/actors-good-pack)]
+  (let [tkey (get-actor-template actors/actors-good-pack)
+        t (get actors/actors-template (keyword tkey))]
     { :pos (get-position x)
+      :actions (get-actions t)
       :teamId 0
       :id (get-id)
-      :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
-      :template template }))
+      :hp (get t :hpMax -1)
+      :template tkey }))
 
 ;; create enemy actor entity
 (defn spawn-enemy-actor [x]
-  (let [template (get-actor-template actors/actors-evil-pack)]
+  (let [tkey (get-actor-template actors/actors-evil-pack)
+        t (get actors/actors-template (keyword tkey))]
     { :pos (get-enemy-position x)
       :teamId 1
+      :actions (get-actions t)
       :id (get-id)
-      :hp (get-in actors/actors-template [(keyword template) :hpMax] -1)
-      :template template }))
+      :hp (get t :hpMax -1)
+      :template tkey }))

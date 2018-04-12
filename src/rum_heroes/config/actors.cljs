@@ -12,6 +12,7 @@
           :damage damage
           :range range
           :moves moves
+          :attacks 1
           :hpMax hpMax }))
 
 ;; get static template from actor entity
