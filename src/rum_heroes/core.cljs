@@ -30,20 +30,26 @@
             (filter #(apply battle/hover-actor? [x y %]) @actors-state)))
 
 ;; select own actor on click event handler
-(defn select-actor []
+(defn select-actor [actor]
+  (reset! actor-selected-state actor)
+  (reset! targets-state (battle/get-targets actor 2 actors-state))
+  (reset! moves-state (battle/get-neighbors-move (get actor :pos) actors-state)))
+
+(defn unselect-actor []
+  (reset! actor-selected-state '())
+  (reset! moves-state [])
+  (reset! targets-state []))
+
+(defn select-hover-actor []
   (when (not (empty? @actor-hover-state))
     (let [actor (first @actor-hover-state)]
       (when (= @team-turn (get actor :teamId))
-        (reset! actor-selected-state actor)
-        (reset! targets-state (battle/get-targets @actor-selected-state 2 actors-state))
-        (reset! moves-state (battle/get-neighbors-move (get actor :pos) actors-state))))))
+        (select-actor actor)))))
 
 (defn do-move [x y moves actors]
   (let [a (battle/find-actor (get-in @actor-selected-state [:id]) @actors)]
     (swap! actors assoc-in [ (get a 0) :pos] (hash-map :x x :y y))
-    (reset! moves-state [])
-    (reset! targets-state [])
-    (reset! actor-selected-state '())))
+    (unselect-actor)))
 
 (defn move-actor [x y]
   (when (battle/can-move? x y @moves-state)
@@ -55,11 +61,12 @@
       (battle/do-damage (get-in target [:id]) 2 actors))))
 
 (defn end-turn []
+  (unselect-actor)
   (reset! team-turn (mod (+ @team-turn 1) 2)))
 
 (defn on-tile-click [x y]
   (do-attack x y targets-state actors-state)
-  (select-actor)
+  (select-hover-actor)
   (move-actor x y))
 
 (defn on-end-turn-click [_]
