@@ -2,6 +2,7 @@
 
 Simple and minimal HTML turn-based strategy written in [ClojureScript](https://clojurescript.org/) and [Rum](https://github.com/tonsky/rum) (react wrapper). Rendering via HTML dom sprites. In real projects you may have to choose Canvas or WebGL for fast and convenient 2d / 3d rendering.
 Rum-heroes has been written just for fun and for educational purposes with Clojure :)
+[Play it now!](https://ps-spectre.github.io/)
 
 ## WIP Screenshot
 ![wip screenshot](https://i.imgur.com/F7DblHh.jpg)
