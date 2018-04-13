@@ -50,9 +50,9 @@
           [ :div "moves: " (get t :moves)]
           [ :div "hp: " (get t :hpMax)]]])))
 
-(rum/defc actor-ui-component < rum/reactive [hover selected teamId]
-  (let [hc (rum/cursor-in hover [])
-        sc (rum/cursor-in selected [])]
-    (when (or (rum/react hc) (rum/react sc))
-      (js/console.log "trigger")
-      (get-actor-body (get-actor @sc (first @hc) teamId) teamId))))
+;; state -- derived atom with hover and selected state
+(rum/defc actor-ui-component < rum/reactive [state teamId]
+  (let [ s (rum/react state)
+         hover (first (get s 0))
+         selected (get s 1)]
+    (get-actor-body (get-actor selected hover teamId) teamId)))

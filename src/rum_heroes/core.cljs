@@ -22,6 +22,8 @@
 (defonce targets-state (atom []))
 (defonce actor-hover-state (atom '()))
 (defonce actor-selected-state (atom '()))
+(defonce actor-mouse-state (rum/derived-atom [actor-hover-state actor-selected-state]
+                                             ::key (fn [a b] [a b])))
 
 ;; event handlers from view / ui 
 (defn on-tile-hover [x y]
@@ -114,11 +116,11 @@
   (. js/document (getElementById "worldHover")))
 
 (rum/mount [(ui/player-title "Player 1" 0 team-turn)
-            (ui/actor-ui-component actor-hover-state actor-selected-state 0)]
+            (ui/actor-ui-component actor-mouse-state 0)]
   (. js/document (getElementById "leftPanel")))
 
 (rum/mount [(ui/player-title "Player 2" 1 team-turn)
-            (ui/actor-ui-component actor-hover-state actor-selected-state 1)]
+            (ui/actor-ui-component actor-mouse-state 1)]
   (. js/document (getElementById "rightPanel")))
 
 (rum/mount [(ui/tile-hover-component tile-hover-state) 
